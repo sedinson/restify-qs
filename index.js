@@ -2,17 +2,20 @@
 
 var _ = require('lodash');
 
+var reg_operator = /(>|<|!=|=|not like|like)\s*(.+)/gi;
+
 var get_value = function (str) {
-    var params = /(>|<|!=|=|not like|like)\s*(.+)/gi.exec(str.toLowerCase());
-    if (params) {
-        if (params[1].indexOf('like') >= 0) {
+    reg_operator.lastIndex = 0;
+    var params = reg_operator.exec(str.toLowerCase());
+    if(params) {
+        if(params[1].indexOf('like') >= 0) {
             params[2] = '%' + params[2] + '%';
         }
 
         return params.splice(1, 2);
     }
 
-    if (str && str != "") {
+    if(str && str != "") {
         return ['=', str];
     }
 
@@ -26,12 +29,13 @@ var qs = {
             var filters = {};
 
             _.each(str.split(';'), function (item) {
-                var filter = item.split(':');
+                var index = item.indexOf(':');
 
-                if (filter.length == 2) {
-                    var mod = filter[0].split('.');
+                if(index > 0) {
+                    var filter = [item.substr(0, index), item.substr(index + 1)],
+                        mod = filter[0].split('.');
 
-                    if (mod.length == 2) {
+                    if(mod.length == 2) {
                         filters[mod[0]] = filters[mod[0]] || {};
                         filters[mod[0]][mod[1]] = filters[mod[0]][mod[1]] || [];
                         filters[mod[0]][mod[1]].push(get_value(filter[1]));
@@ -52,11 +56,11 @@ var qs = {
             var sort = {};
 
             _.each(str.split(';'), function (item) {
-                var tmp = /(\-?)(\w+)/.exec(item);
+                 var tmp = /(\-?)(\w+)/.exec(item);
 
-                if (tmp) {
-                    sort[tmp[2]] = tmp[1] == '' ? 'asc' : 'desc';
-                }
+                 if(tmp) {
+                     sort[tmp[2]] = tmp[1] == ''? 'asc' : 'desc';
+                 }
             });
 
             return sort;
