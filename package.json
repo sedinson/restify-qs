@@ -1,6 +1,6 @@
 {
   "name": "restify-qs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Restify QueryString for Restify Paginator",
   "main": "index.js",
   "scripts": {
