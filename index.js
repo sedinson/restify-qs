@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 
-var reg_operator = /(>|<|!=|=|not like|like)\s*(.+)/gi;
+var reg_operator = /(>|<|!=|=|not like|like|\$)\s*(.+)/gi;
 
 var get_value = function (str) {
     reg_operator.lastIndex = 0;
